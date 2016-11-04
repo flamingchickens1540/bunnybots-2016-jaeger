@@ -1,5 +1,6 @@
 package robot;
 
+import ccre.channel.BooleanOutput;
 import ccre.channel.FloatInput;
 import ccre.channel.FloatOutput;
 import ccre.ctrl.ExtendedMotorFailureException;
@@ -31,7 +32,7 @@ public class JaegerMain implements FRCApplication {
     @Override
     public void setupRobot() throws ExtendedMotorFailureException {
 
-    	Drive.setup();
-    	
+    	JaegerDrive.setup();
+    	IntakeArm.setup();
     }
 }
