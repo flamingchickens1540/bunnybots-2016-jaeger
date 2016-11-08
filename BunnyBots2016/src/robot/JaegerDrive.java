@@ -37,7 +37,7 @@ public class JaegerDrive {
     	FloatInput extended = leftTrigger.negated().plus(rightTrigger);
   
     	//Shifting
-    	BooleanCell shiftingOn = new BooleanCell(true);
+    	BooleanCell shiftingOn = new BooleanCell(true); 
     	toggleShifting.onPress(shiftingOn.eventToggle());
     	/**
     	FloatInput leftDriveVelocity = FRC.encoder(aChannel, bChannel, reverse, resetWhen); // Nobody knows how to get the speed of the motors either
