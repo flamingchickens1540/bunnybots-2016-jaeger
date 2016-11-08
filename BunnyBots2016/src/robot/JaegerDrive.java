@@ -1,5 +1,6 @@
 package robot;
 
+import ccre.channel.BooleanCell;
 import ccre.channel.BooleanInput;
 import ccre.channel.BooleanOutput;
 import ccre.channel.EventOutput;
@@ -14,7 +15,7 @@ public class JaegerDrive {
 		
 		FloatOutput leftDriveFront = FRC.talon(3);
     	FloatOutput leftDriveMiddle = FRC.talon(0);
-    	FloatOutput leftDriveBack = FRC.talon(9);
+    	FloatOutput leftDriveBack = FRC.talon(9).negate(); // Nobody knows why motor 9 is reversed
     	FloatOutput rightDriveFront = FRC.talon(1);
     	FloatOutput rightDriveMiddle = FRC.talon(4);
     	FloatOutput rightDriveBack = FRC.talon(8);
@@ -23,17 +24,33 @@ public class JaegerDrive {
     	FloatOutput leftDrive = leftDriveFront.combine(leftDriveMiddle).combine(leftDriveBack).negate().addRamping(driveRampingConstant.get(), FRC.constantPeriodic);
     	FloatOutput rightDrive = rightDriveFront.combine(rightDriveMiddle).combine(rightDriveBack).addRamping(driveRampingConstant.get(),FRC.constantPeriodic);
     	
-    	BooleanOutput shift = FRC.solenoid(0).combine(FRC.solenoid(1));
+    	BooleanOutput activateShift = FRC.solenoid(0).combine(FRC.solenoid(1));
 
     	FloatInput leftDriveControls = JaegerMain.controlBinding.addFloat("Drive Left Axis").deadzone(0.2f);
     	FloatInput rightDriveControls = JaegerMain.controlBinding.addFloat("Drive Right Axis").deadzone(0.2f);
-    	BooleanInput shiftingControls = JaegerMain.controlBinding.addBoolean("shiftingControls");
+    	FloatInput leftTrigger = JaegerMain.controlBinding.addFloat("Left Trigger").deadzone(0.2f);
+    	FloatInput rightTrigger = JaegerMain.controlBinding.addFloat("Right Trigger").deadzone(0.2f);
+    	BooleanInput toggleShifting = JaegerMain.controlBinding.addBoolean("Toggle Shifting");
+    	//BooleanInput shiftingControls = JaegerMain.controlBinding.addBoolean("shiftingControls");
+    	
+    	
+    	FloatInput extended = leftTrigger.negated().plus(rightTrigger);
   
-    	//Manual Shifting
-    	shiftingControls.send(shift);
-    	//FRC.encoder(aChannel, bChannel, reverse, resetWhen)
+    	//Shifting
+    	BooleanCell shiftingOn = new BooleanCell(true);
+    	toggleShifting.onPress(shiftingOn.eventToggle());
+    	/**
+    	FloatInput leftDriveVelocity = FRC.encoder(aChannel, bChannel, reverse, resetWhen); // Nobody knows how to get the speed of the motors either
+    	FloatInput rightDriveVelocity = FRC.encoder(aChannel, bChannel, reverse, resetWhen);
+    	
+    	FloatInput autoShiftingLimit = JaegerMain.mainTuning.getFloat("Automatic Shifting Limit", 100);
+    	BooleanInput shiftingControls = leftDriveVelocity.atLeast(autoShiftingLimit).and(rightDriveVelocity.atLeast(autoShiftingLimit)).and(shiftingOn);
+    	
+    	shiftingControls.send(activateShift);
+    	**/
     	
     	//Tank Drive
-		Drive.tank(leftDriveControls, rightDriveControls, leftDrive, rightDrive);
+		Drive.extendedTank(leftDriveControls, rightDriveControls, extended, leftDrive, rightDrive);
+    	//leftDriveControls.send(leftDriveMiddle);
 	}
 }
