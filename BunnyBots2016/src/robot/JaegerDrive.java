@@ -34,7 +34,7 @@ public class JaegerDrive {
     	//BooleanInput shiftingControls = JaegerMain.controlBinding.addBoolean("shiftingControls");
     	
     	
-    	FloatInput extended = leftTrigger.negated().plus(rightTrigger);
+    	FloatInput extended = leftTrigger.minus(rightTrigger);
   
     	//Shifting
     	BooleanCell shiftingOn = new BooleanCell(true); 
