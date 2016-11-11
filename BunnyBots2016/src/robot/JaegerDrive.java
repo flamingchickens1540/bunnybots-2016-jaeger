@@ -42,7 +42,7 @@ public class JaegerDrive {
     	toggleShifting.onPress(shiftingOn.eventToggle());
     	Cluck.publish("Is in Low Gear", shiftingOn);
     	/**
-    	FloatInput leftDriveVelocity = FRC.encoder(aChannel, bChannel, reverse, resetWhen); // Nobody knows how to get the speed of the motors either
+    	FloatInput leftDriveVelocity = FRC.encoder(aChannel, bChannel, reverse, resetWhen); // Nobody knows how to get the speed of the motors either!
     	FloatInput rightDriveVelocity = FRC.encoder(aChannel, bChannel, reverse, resetWhen);
     	
     	FloatInput autoShiftingLimit = JaegerMain.mainTuning.getFloat("Automatic Shifting Limit", 100);
