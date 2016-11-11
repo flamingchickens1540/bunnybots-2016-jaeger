@@ -6,6 +6,7 @@ import ccre.channel.BooleanOutput;
 import ccre.channel.EventOutput;
 import ccre.channel.FloatInput;
 import ccre.channel.FloatOutput;
+import ccre.cluck.Cluck;
 import ccre.ctrl.Drive;
 import ccre.ctrl.ExtendedMotorFailureException;
 import ccre.frc.FRC;
@@ -24,7 +25,7 @@ public class JaegerDrive {
     	FloatOutput leftDrive = leftDriveFront.combine(leftDriveMiddle).combine(leftDriveBack).negate().addRamping(driveRampingConstant.get(), FRC.constantPeriodic);
     	FloatOutput rightDrive = rightDriveFront.combine(rightDriveMiddle).combine(rightDriveBack).addRamping(driveRampingConstant.get(),FRC.constantPeriodic);
     	
-    	BooleanOutput activateShift = FRC.solenoid(0).combine(FRC.solenoid(1));
+    	BooleanOutput activateShift = FRC.solenoid(0).combine(FRC.solenoid(1).invert());
 
     	FloatInput leftDriveControls = JaegerMain.controlBinding.addFloat("Drive Left Axis").deadzone(0.2f);
     	FloatInput rightDriveControls = JaegerMain.controlBinding.addFloat("Drive Right Axis").deadzone(0.2f);
@@ -39,15 +40,18 @@ public class JaegerDrive {
     	//Shifting
     	BooleanCell shiftingOn = new BooleanCell(true); 
     	toggleShifting.onPress(shiftingOn.eventToggle());
+    	Cluck.publish("Is in Low Gear", shiftingOn);
     	/**
     	FloatInput leftDriveVelocity = FRC.encoder(aChannel, bChannel, reverse, resetWhen); // Nobody knows how to get the speed of the motors either
     	FloatInput rightDriveVelocity = FRC.encoder(aChannel, bChannel, reverse, resetWhen);
     	
     	FloatInput autoShiftingLimit = JaegerMain.mainTuning.getFloat("Automatic Shifting Limit", 100);
     	BooleanInput shiftingControls = leftDriveVelocity.atLeast(autoShiftingLimit).and(rightDriveVelocity.atLeast(autoShiftingLimit)).and(shiftingOn);
-    	
-    	shiftingControls.send(activateShift);
     	**/
+    	
+    	
+    	shiftingOn.send(activateShift);
+    	
     	
     	//Tank Drive
 		Drive.extendedTank(leftDriveControls, rightDriveControls, extended, leftDrive, rightDrive);
