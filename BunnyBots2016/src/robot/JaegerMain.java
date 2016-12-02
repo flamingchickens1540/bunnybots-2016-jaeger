@@ -18,7 +18,7 @@ import ccre.tuning.TuningContext;
  * loading it. If you change the name, use Eclipse's rename functionality. If
  * you don't, you will have to change the name in Deployment.java.
  *
- * Make sure to set {@link #TEAM_NUMBER} to your team number.
+ * Make sure to set {@link #TEAM_NUMBER} to your team  number.
  */
 
 public class JaegerMain implements FRCApplication {

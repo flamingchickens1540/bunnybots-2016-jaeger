@@ -66,7 +66,7 @@ public class JaegerDrive {
 	public class Test implements FRCApplication {
 	    public void setupRobot() {
 
-	        FRC.registerAutonomous(new InstinctModule() {
+	        FRC.registerAutonomous(new InstinctModule() { 
 	            @Override
 	            protected void autonomousMain() throws AutonomousModeOverException, InterruptedException {
 	            	System.out.println("hello");

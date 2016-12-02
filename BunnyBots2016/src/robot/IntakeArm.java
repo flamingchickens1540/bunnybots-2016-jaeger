@@ -19,7 +19,7 @@ import ccre.timers.PauseTimer;
 
 
 public class IntakeArm {
-	
+	 
 	public static void setup() throws ExtendedMotorFailureException {
 		FloatInput armRampingConstant = JaegerMain.mainTuning.getFloat("Arm Ramping Constant", .02f);
 		
