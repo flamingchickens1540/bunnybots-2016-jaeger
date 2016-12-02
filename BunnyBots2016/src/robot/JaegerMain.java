@@ -7,6 +7,8 @@ import ccre.ctrl.ExtendedMotorFailureException;
 import ccre.ctrl.binding.ControlBindingCreator;
 import ccre.frc.FRC;
 import ccre.frc.FRCApplication;
+import ccre.instinct.AutonomousModeOverException;
+import ccre.instinct.InstinctModule;
 import ccre.log.Logger;
 import ccre.tuning.TuningContext;
 
@@ -34,5 +36,19 @@ public class JaegerMain implements FRCApplication {
 
     	JaegerDrive.setup();
     	IntakeArm.setup();
+    
+    
+    
+    FRC.registerAutonomous(new InstinctModule() {
+        @Override
+        protected void autonomousMain() throws AutonomousModeOverException, InterruptedException {
+        	System.out.println("hello");
+        	JaegerDrive.leftDrive.set(1);
+        	JaegerDrive.rightDrive.set(1);
+        	waitForTime(1000);
+        	JaegerDrive.leftDrive.set(0);
+        	JaegerDrive.rightDrive.set(0);
+        }
+    });
     }
 }

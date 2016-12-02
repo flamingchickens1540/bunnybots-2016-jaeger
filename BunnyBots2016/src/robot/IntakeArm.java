@@ -23,17 +23,19 @@ public class IntakeArm {
 	public static void setup() throws ExtendedMotorFailureException {
 		FloatInput armRampingConstant = JaegerMain.mainTuning.getFloat("Arm Ramping Constant", .02f);
 		
-		FloatOutput armBaseMotor = FRC.talonCAN(1).simpleControl().addRamping(armRampingConstant.get(), FRC.constantPeriodic);
-		FloatOutput armClawMotor = FRC.talonCAN(2).simpleControl().addRamping(armRampingConstant.get(), FRC.constantPeriodic);
-		FloatOutput armIntakeMotor = FRC.talonCAN(3).simpleControl().addRamping(armRampingConstant.get(), FRC.constantPeriodic);
+		FloatOutput armBaseMotor = FRC.talonCAN(2).simpleControl().addRamping(armRampingConstant.get(), FRC.constantPeriodic);
+		FloatOutput armClawMotor = FRC.talonCAN(1).simpleControl().addRamping(armRampingConstant.get(), FRC.constantPeriodic);
+		FloatOutput armIntakeMotor = FRC.talonCAN(4).simpleControl().addRamping(armRampingConstant.get(), FRC.constantPeriodic);
 		
 		FloatInput armBaseController = JaegerMain.controlBinding.addFloat("Arm Base Axis").deadzone(0.2f);
     	FloatInput armClawController = JaegerMain.controlBinding.addFloat("Arm Claw Axis").deadzone(0.2f);
     	FloatInput armIntakeController = JaegerMain.controlBinding.addFloat("Arm Intake Axis").deadzone(0.2f);
+    	FloatInput armOuttakeController = JaegerMain.controlBinding.addFloat("Arm Outtake Axis").deadzone(0.2f);
     	
-    	armBaseController.send(armBaseMotor);
-    	armClawController.send(armClawMotor);
-    	armIntakeController.send(armIntakeMotor);
+    	
+    	armBaseController.multipliedBy(0.5f).send(armBaseMotor);
+    	armClawController.multipliedBy(0.5f).send(armClawMotor);
+    	armIntakeController.minus(armOuttakeController).send(armIntakeMotor);
 		
 	}	
 }
