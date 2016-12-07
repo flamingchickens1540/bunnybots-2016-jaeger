@@ -30,7 +30,7 @@ public class JaegerDrive {
 	public static BooleanOutput activateShift = FRC.solenoid(0).combine(FRC.solenoid(1));
 	
 	public static void setup() throws ExtendedMotorFailureException {
-		
+		 
 		
 
     	FloatInput leftDriveControls = JaegerMain.controlBinding.addFloat("Drive Left Axis").deadzone(0.2f);

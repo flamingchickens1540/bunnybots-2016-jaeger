@@ -21,7 +21,7 @@ import ccre.timers.PauseTimer;
 
 public class IntakeArm {
 	
-	public static FloatOutput armBaseMotor;
+	public static FloatOutput armBaseMotor; 
 	public static FloatOutput armClawMotor;
 	public static FloatOutput armIntakeMotor;
 	 
