@@ -45,14 +45,12 @@ public class JaegerMain implements FRCApplication {
         	
         	System.out.println("asdf");
         	
-        	waitUntil(FRC.digitalInput(9, FRC.constantPeriodic));
-        	
         	IntakeArm.armIntakeMotor.set(.7f);
         	waitForTime(1500);
         	IntakeArm.armIntakeMotor.set(0);
         	
-        	JaegerDrive.leftDrive.set(.5f);
-        	JaegerDrive.rightDrive.set(.5f);
+        	JaegerDrive.leftDrive.set(.75f);
+        	JaegerDrive.rightDrive.set(.75f);
             waitUntil(5000, FRC.digitalInput(9, FRC.constantPeriodic));
         	JaegerDrive.leftDrive.set(0);
         	JaegerDrive.rightDrive.set(0);
