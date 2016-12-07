@@ -42,12 +42,31 @@ public class JaegerMain implements FRCApplication {
     FRC.registerAutonomous(new InstinctModule() {
         @Override
         protected void autonomousMain() throws AutonomousModeOverException, InterruptedException {
-        	System.out.println("hello");
-        	JaegerDrive.leftDrive.set(1);
-        	JaegerDrive.rightDrive.set(1);
-        	waitForTime(1000);
+        	
+        	System.out.println("asdf");
+        	
+        	waitUntil(FRC.digitalInput(9, FRC.constantPeriodic));
+        	
+        	IntakeArm.armIntakeMotor.set(.7f);
+        	waitForTime(1500);
+        	IntakeArm.armIntakeMotor.set(0);
+        	
+        	JaegerDrive.leftDrive.set(.5f);
+        	JaegerDrive.rightDrive.set(.5f);
+            waitUntil(5000, FRC.digitalInput(9, FRC.constantPeriodic));
         	JaegerDrive.leftDrive.set(0);
         	JaegerDrive.rightDrive.set(0);
+        	
+        	IntakeArm.armBaseMotor.set(-.7f);
+        	IntakeArm.armClawMotor.set(.7f);
+        	waitForTime(700);
+        	IntakeArm.armBaseMotor.set(0);
+        	IntakeArm.armClawMotor.set(0);
+        	
+        	IntakeArm.armIntakeMotor.set(-1f);
+        	waitForTime(2000);
+        	IntakeArm.armIntakeMotor.set(0);
+        	
         }
     });
     }
