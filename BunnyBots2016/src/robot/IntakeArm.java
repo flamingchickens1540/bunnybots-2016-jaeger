@@ -5,6 +5,7 @@ import ccre.channel.BooleanInput;
 import ccre.channel.BooleanOutput;
 import ccre.channel.EventCell;
 import ccre.channel.EventOutput;
+import ccre.channel.FloatCell;
 import ccre.channel.FloatInput;
 import ccre.channel.FloatOutput;
 import ccre.cluck.Cluck;
@@ -24,6 +25,8 @@ public class IntakeArm {
 	public static FloatOutput armBaseMotor; 
 	public static FloatOutput armClawMotor;
 	public static FloatOutput armIntakeMotor;
+	
+	public static BooleanOutput gunSolenoid = FRC.solenoid(3);
 	 
 	public static void setup() throws ExtendedMotorFailureException {
 		FloatInput armRampingConstant = JaegerMain.mainTuning.getFloat("Arm Ramping Constant", .02f);
@@ -32,11 +35,8 @@ public class IntakeArm {
 		armClawMotor = FRC.talonCAN(1).simpleControl().addRamping(armRampingConstant.get(), FRC.constantPeriodic);
 		armIntakeMotor = FRC.talonCAN(4).simpleControl().addRamping(armRampingConstant.get(), FRC.constantPeriodic);
 		
-		FloatOutput gunSpinupMotor = FRC.talonCAN(3).simpleControl().addRamping(armRampingConstant.get(), FRC.constantPeriodic);
 		
-		BooleanOutput gunPiston = FRC.solenoid(1);
-		
-		BooleanInput toggleGunPiston = JaegerMain.controlBinding.addBoolean("Toggle Gun Piston");
+		BooleanInput toggleGunSolenoid = JaegerMain.controlBinding.addBoolean("Toggle Gun Piston");
 		
 		FloatInput armBaseController = JaegerMain.controlBinding.addFloat("Arm Base Axis").deadzone(0.2f);
     	FloatInput armClawController = JaegerMain.controlBinding.addFloat("Arm Claw Axis").deadzone(0.2f);
@@ -46,11 +46,11 @@ public class IntakeArm {
     	
     	
     	armBaseController.multipliedBy(0.5f).send(armBaseMotor);
-    	armClawController.multipliedBy(0.5f).send(armClawMotor);
+    	armClawController.multipliedBy(0.8f).send(armClawMotor);
     	armIntakeController.minus(armOuttakeController).send(armIntakeMotor);
-    	toggleGunPiston.send(gunPiston);
+    	toggleGunSolenoid.send(gunSolenoid);
     	
-    	gunSpinupController.send(gunSpinupMotor);
+    	//gunSpinupController.send(gunSpinupMotor);
 		
 	}	
 }
