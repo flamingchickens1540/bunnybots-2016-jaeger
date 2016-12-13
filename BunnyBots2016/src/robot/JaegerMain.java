@@ -43,6 +43,18 @@ public class JaegerMain implements FRCApplication {
         @Override
         protected void autonomousMain() throws AutonomousModeOverException, InterruptedException {
         	
+        	IntakeArm.armBaseMotor.set(-.7f);
+        	IntakeArm.armClawMotor.set(.7f);
+        	waitForTime(700);
+        	IntakeArm.armBaseMotor.set(0);
+        	IntakeArm.armClawMotor.set(0);
+        	
+        	IntakeArm.armBaseMotor.set(.7f);
+        	IntakeArm.armClawMotor.set(-.7f);
+        	waitForTime(700);
+        	IntakeArm.armBaseMotor.set(0);
+        	IntakeArm.armClawMotor.set(0);
+        	
         	IntakeArm.armIntakeMotor.set(.7f);
         	waitForTime(1500);
         	IntakeArm.armIntakeMotor.set(0);
