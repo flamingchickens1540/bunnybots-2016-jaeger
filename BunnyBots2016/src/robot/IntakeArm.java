@@ -46,7 +46,7 @@ public class IntakeArm {
     	
     	
     	armBaseController.multipliedBy(0.5f).send(armBaseMotor);
-    	armClawController.multipliedBy(0.8f).send(armClawMotor);
+    	armClawController.multipliedBy(1f).send(armClawMotor);
     	armIntakeController.minus(armOuttakeController).send(armIntakeMotor);
     	toggleGunSolenoid.send(gunSolenoid);
     	
