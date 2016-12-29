@@ -44,7 +44,14 @@ public class JaegerMain implements FRCApplication {
         @Override
         protected void autonomousMain() throws AutonomousModeOverException, InterruptedException {
         	
+        	JaegerDrive.leftDrive.set(.75f);
+        	JaegerDrive.rightDrive.set(.93f);
+        	waitUntil(FRC.digitalInput(9, FRC.constantPeriodic));
+        	JaegerDrive.leftDrive.set(0);
+        	JaegerDrive.rightDrive.set(0);
         	
+        	
+        	/**
         	//Intake the bunny while backing up
         	IntakeArm.armIntakeMotor.set(.7f);
         	JaegerDrive.leftDrive.set(-.75f);
@@ -57,8 +64,8 @@ public class JaegerMain implements FRCApplication {
         	
         	
         	//Drive until the optical sensor is tripped
-        	JaegerDrive.leftDrive.set(.77f);
-        	JaegerDrive.rightDrive.set(.75f);
+        	JaegerDrive.leftDrive.set(.75f);
+        	JaegerDrive.rightDrive.set(.93f);
             waitUntil(2500, FRC.digitalInput(9, FRC.constantPeriodic));
             JaegerDrive.rightDrive.set(.25f);
             waitUntil(FRC.digitalInput(9, FRC.constantPeriodic));
@@ -77,7 +84,7 @@ public class JaegerMain implements FRCApplication {
         	//Release the bunny into the trash can
         	IntakeArm.armIntakeMotor.set(-1f);
         	waitForTime(3000);
-        	IntakeArm.armIntakeMotor.set(0);
+        	IntakeArm.armIntakeMotor.set(0);**/
         	
         }
     });
