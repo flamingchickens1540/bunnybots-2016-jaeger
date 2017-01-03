@@ -22,6 +22,16 @@ import ccre.timers.PauseTimer;
 
 public class IntakeArm {
 	
+	private static EventOutput split(BooleanInput cond, EventOutput t, EventOutput f) {
+        return () -> {
+            if (cond.get()) {
+                t.event();
+            } else {
+                f.event();
+            }
+        };
+    }
+	
 	public static FloatOutput armBaseMotor; 
 	public static FloatOutput armClawMotor;
 	public static FloatOutput armIntakeMotor;
@@ -31,12 +41,20 @@ public class IntakeArm {
 	
 	 
 	public static void setup() throws ExtendedMotorFailureException {
+		
+		PauseTimer fireTimer = new PauseTimer(100);
+		
 		FloatInput armRampingConstant = JaegerMain.mainTuning.getFloat("Arm Ramping Constant", .02f);
 		
 		armBaseMotor = FRC.talonCAN(2).simpleControl().addRamping(armRampingConstant.get(), FRC.constantPeriodic);
 		armClawMotor = FRC.talonCAN(1).simpleControl().addRamping(armRampingConstant.get(), FRC.constantPeriodic);
 		armIntakeMotor = FRC.talonCAN(4).simpleControl().addRamping(armRampingConstant.get(), FRC.constantPeriodic);
 		gunSpinupMotor = FRC.talonCAN(3).simpleControl().addRamping(armRampingConstant.get(), FRC.constantPeriodic);
+		
+		armBaseMotor.setWhen(0, FRC.startTele);
+		armClawMotor.setWhen(0, FRC.startTele);
+		armIntakeMotor.setWhen(0, FRC.startTele);
+		gunSpinupMotor.setWhen(0, FRC.startTele);
 		
 		BooleanInput toggleGunSolenoid = JaegerMain.controlBinding.addBoolean("Shooter");
 		BooleanInput toggleGunMotor = JaegerMain.controlBinding.addBoolean("Gun Motor");
@@ -49,7 +67,11 @@ public class IntakeArm {
     	armBaseController.multipliedBy(0.5f).send(armBaseMotor);
     	armClawController.multipliedBy(1f).send(armClawMotor);
     	armIntakeController.minus(armOuttakeController).send(armIntakeMotor);
-    	toggleGunSolenoid.and(toggleGunMotor).send(gunSolenoid);
+    	toggleGunSolenoid.and(toggleGunMotor).onPress(fireTimer);
+    	
+    	
+    	fireTimer.triggerAtStart(gunSolenoid.eventSet(true));
+    	fireTimer.triggerAtEnd(gunSolenoid.eventSet(false));
     	
     	toggleGunMotor.onPress(gunSpinupMotor.eventSet(.4f));
     	toggleGunMotor.onRelease(gunSpinupMotor.eventSet(0f));

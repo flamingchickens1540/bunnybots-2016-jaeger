@@ -17,6 +17,17 @@ import ccre.instinct.InstinctModule;
 import ccre.timers.PauseTimer;
 
 public class JaegerDrive {
+	
+	private static EventOutput split(BooleanInput cond, EventOutput t, EventOutput f) {
+        return () -> {
+            if (cond.get()) {
+                t.event();
+            } else {
+                f.event();
+            }
+        };
+    }
+	
 	static FloatOutput leftDriveFront = FRC.talon(3);
 	static FloatOutput leftDriveMiddle = FRC.talon(0);
 	static FloatOutput leftDriveBack = FRC.talon(9).negate(); // Nobody knows why motor 9 is reversed
@@ -30,9 +41,14 @@ public class JaegerDrive {
 	public static BooleanOutput activateShift = FRC.solenoid(0).combine(FRC.solenoid(1));
 	
 	public static void setup() throws ExtendedMotorFailureException {
-		 
+		
+		leftDrive.setWhen(0, FRC.startTele);
+    	rightDrive.setWhen(0, FRC.startTele);
+    	
+		BooleanCell isShifted = new BooleanCell(false);
 		
 		//Controls
+		FloatInput fineTurningControls = JaegerMain.controlBinding.addFloat("Fine Turning Axis").deadzone(0.2f);
     	FloatInput leftDriveControls = JaegerMain.controlBinding.addFloat("Drive Left Axis").deadzone(0.2f);
     	FloatInput rightDriveControls = JaegerMain.controlBinding.addFloat("Drive Right Axis").deadzone(0.2f);
     	FloatInput extendedForwards = JaegerMain.controlBinding.addFloat("Drive Forwards").deadzone(0.2f);
@@ -41,12 +57,16 @@ public class JaegerDrive {
     	BooleanInput shiftControls = JaegerMain.controlBinding.addBoolean("Shift Controls");
     	
     	FloatInput extended = extendedForwards.minus(extendedBackwards);
+    
   
     	//Shifting
-    	shiftControls.send(activateShift);
+    	shiftControls.onPress(split(isShifted,isShifted.eventSet(false),isShifted.eventSet(true)));
+    	isShifted.onPress(activateShift.eventSet(false));
+    	//isShifted.onRelease(activateShift.eventSet(true));
+    	Cluck.publish("isInHighGear", isShifted.asInput());
     	
     	//Tank Drive
-		Drive.extendedTank(leftDriveControls, rightDriveControls, extended, leftDrive, rightDrive);
+		Drive.extendedTank(leftDriveControls.minus(fineTurningControls.multipliedBy(.7f)), rightDriveControls.plus(fineTurningControls.multipliedBy(.7f)), extended, leftDrive, rightDrive);
 		
 	}
 }
